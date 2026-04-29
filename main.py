@@ -2,6 +2,21 @@
 
 from queue_LL import QueueLinkedList
 from slot_management import SlotManager
+from transaksi import TransaksiManager
+
+
+def tampilkan_menu():
+
+    print("\n=== SISTEM CARWASH CLI ===")
+
+    print("1. Tambah Mobil ke Antrian")
+    print("2. Tampilkan Antrian")
+    print("3. Proses Slot (Assign Mobil)")
+    print("4. Selesaikan Cuci")
+    print("5. Tampilkan Slot")
+    print("6. Lihat Transaksi")
+    print("7. Total Pendapatan")
+    print("0. Keluar")
 
 
 def main():
@@ -10,54 +25,112 @@ def main():
 
     slot_manager = SlotManager()
 
-    # Tambah mobil
-    queue.enqueue(
-        "Andi",
-        "08123456789",
-        "B1234CD",
-        "Cuci Biasa",
-        50000
-    )
+    transaksi_manager = TransaksiManager()
 
-    queue.enqueue(
-        "Budi",
-        "08987654321",
-        "B5678EF",
-        "Cuci Premium",
-        75000
-    )
+    while True:
 
-    queue.enqueue(
-        "Cici",
-        "08222222222",
-        "B9999GH",
-        "Cuci Biasa",
-        50000
-    )
+        tampilkan_menu()
 
-    # Tampilkan queue
-    queue.display_queue()
+        pilihan = input("Pilih menu: ")
 
-    # Assign ke slot
-    slot_manager.assign_mobil(queue)
+        # TAMBAH MOBIL
+        if pilihan == "1":
 
-    slot_manager.display_slots()
+            print("\n=== TAMBAH MOBIL ===")
 
-    # Assign lagi (untuk slot kedua)
-    slot_manager.assign_mobil(queue)
+            nama = input("Nama pelanggan: ")
 
-    slot_manager.display_slots()
+            no_hp = input("No HP: ")
 
-    # Selesaikan slot 1
-    slot_manager.selesai_cuci(1)
+            plat = input("Plat nomor: ")
 
-    slot_manager.display_slots()
+            jenis = input("Jenis layanan: ")
 
-    # Assign lagi
-    slot_manager.assign_mobil(queue)
+            try:
 
-    slot_manager.display_slots()
+                harga = int(
+                    input("Harga layanan: ")
+                )
+
+            except ValueError:
+
+                print("Harga harus angka!")
+
+                continue
+
+            queue.enqueue(
+                nama,
+                no_hp,
+                plat,
+                jenis,
+                harga
+            )
+
+        elif pilihan == "2":
+
+            queue.display_queue()
+
+        elif pilihan == "3":
+
+            slot_manager.assign_mobil(queue)
+
+        elif pilihan == "4":
+
+            try:
+
+                id_slot = int(
+                    input("Masukkan ID Slot: ")
+                )
+
+            except ValueError:
+
+                print("ID Slot harus angka!")
+
+                continue
+
+            mobil, waktu_mulai = \
+                slot_manager.selesai_cuci(id_slot)
+
+            if mobil:
+
+                metode = input(
+                    "Metode pembayaran: "
+                )
+
+                transaksi_manager.buat_transaksi(
+                    mobil=mobil,
+                    waktu_mulai=waktu_mulai,
+                    metode_pembayaran=metode
+                )
+
+        elif pilihan == "5":
+
+            slot_manager.display_slots()
+
+        elif pilihan == "6":
+
+            transaksi_manager.display_transaksi()
+
+        elif pilihan == "7":
+
+            total = \
+                transaksi_manager.hitung_total_pendapatan()
+
+            print(
+                f"Total pendapatan: Rp {total}"
+            )
+
+        elif pilihan == "0":
+
+            print("Keluar dari program.")
+
+            break
+
+        else:
+
+            print("Pilihan tidak valid!")
 
 
 if __name__ == "__main__":
+
     main()

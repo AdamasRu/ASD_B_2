@@ -76,24 +76,28 @@ class SlotManager:
 
                 if slot.status == "TERPAKAI":
 
-                    mobil = slot.kosongkan_slot()
+                    mobil = slot.mobil
+
+                    waktu_mulai = slot.waktu_mulai
+
+                    slot.kosongkan_slot()
 
                     print(
                         f"Mobil {mobil.plat_nomor} "
                         f"selesai dari Slot {id_slot}"
                     )
 
-                    return mobil
+                    return mobil, waktu_mulai
 
                 else:
 
                     print("Slot sudah kosong.")
 
-                    return None
+                    return None, None
 
         print("Slot tidak ditemukan.")
 
-        return None
+        return None, None
 
 
     def display_slots(self):
