@@ -10,7 +10,7 @@ import os
 # CONFIG
 # =========================================================
 
-GITHUB_TOKEN = "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"  # 
+GITHUB_TOKEN = "-"  # 
 REPO_NAME = "barufaris782-droid/msj-carwash-storage"
 BRANCH = "main"
 
