@@ -357,6 +357,8 @@ def menu():
     table.add_row("5", "Selesaikan Cuci")
     table.add_row("6", "Riwayat Transaksi")
     table.add_row("7", "Export Excel")
+    table.add_row("8", "Hapus Riwayat Transaksi")
+    table.add_row("9", "Searching & Sorting Transaksi")
     table.add_row("0", "Keluar")
 
     console.print(Align.center(table))
@@ -839,6 +841,190 @@ def tampilkan_transaksi():
 
 
 # =========================================================
+# HAPUS TRANSAKSI
+# =========================================================
+
+def hapus_transaksi():
+
+    global transaksi
+
+    clear()
+
+    header()
+
+    if not transaksi:
+
+        error("Belum ada transaksi!")
+
+        pause()
+
+        return
+
+    pilihan = questionary.select(
+        "Pilih invoice yang ingin dihapus:",
+        choices=[
+            questionary.Choice(
+                title=f"{item['invoice']} - {item['nama']} ({item['plat']})",
+                value=item['invoice']
+            )
+            for item in transaksi
+        ],
+        style=custom_style
+    ).ask()
+
+    if pilihan is None:
+        pause()
+        return
+
+    konfirmasi = questionary.confirm(
+        f"Yakin ingin menghapus transaksi {pilihan}?",
+        default=False,
+        style=custom_style
+    ).ask()
+
+    if not konfirmasi:
+        success("Batal menghapus transaksi.")
+        pause()
+        return
+
+    transaksi = [
+        item for item in transaksi
+        if item["invoice"] != pilihan
+    ]
+
+    simpan_transaksi()
+
+    success(f"Transaksi {pilihan} berhasil dihapus.")
+    pause()
+
+
+
+# =========================================================
+# SEARCHING & SORTING TRANSAKSI
+# =========================================================
+
+def tampilkan_data_transaksi(data, judul="[bold bright_cyan]HASIL TRANSAKSI[/bold bright_cyan]"):
+
+    table = Table(
+        title=judul,
+        border_style="cyan",
+        box=box.DOUBLE_EDGE,
+        width=140,
+        show_lines=True
+    )
+
+    table.add_column("QUEUE")
+    table.add_column("INVOICE")
+    table.add_column("NAMA")
+    table.add_column("PLAT")
+    table.add_column("LAYANAN")
+    table.add_column("TOTAL")
+    table.add_column("TANGGAL")
+
+    for item in data:
+
+        table.add_row(
+            item["queue_id"],
+            item["invoice"],
+            item["nama"],
+            item["plat"],
+            item["layanan"],
+            f"Rp {item['harga']:,}",
+            item["tanggal"]
+        )
+
+    console.print(Align.center(table))
+
+
+def search_sort_transaksi():
+
+    clear()
+
+    header()
+
+    if not transaksi:
+
+        error("Belum ada transaksi!")
+
+        pause()
+
+        return
+
+    pilihan = questionary.select(
+        "Pilih fitur:",
+        choices=[
+            "Cari berdasarkan nama",
+            "Sortir transaksi terbaru",
+            "Sortir transaksi terlama"
+        ],
+        style=custom_style
+    ).ask()
+
+    if pilihan is None:
+        pause()
+        return
+
+    hasil = transaksi.copy()
+
+    if pilihan == "Cari berdasarkan nama":
+
+        keyword = questionary.text(
+            "Masukkan nama pelanggan:",
+            style=custom_style
+        ).ask()
+
+        if not keyword:
+            error("Nama tidak boleh kosong!")
+            pause()
+            return
+
+        hasil = [
+            item for item in transaksi
+            if keyword.lower() in item["nama"].lower()
+        ]
+
+        if not hasil:
+
+            error(f"Transaksi dengan nama '{keyword}' tidak ditemukan!")
+
+            pause()
+
+            return
+
+        tampilkan_data_transaksi(
+            hasil,
+            f"[bold bright_cyan]HASIL PENCARIAN: {keyword}[/bold bright_cyan]"
+        )
+
+    elif pilihan == "Sortir transaksi terbaru":
+
+        hasil = sorted(
+            transaksi,
+            key=lambda item: datetime.strptime(item["tanggal"], "%d-%m-%Y %H:%M"),
+            reverse=True
+        )
+
+        tampilkan_data_transaksi(
+            hasil,
+            "[bold bright_cyan]TRANSAKSI - TRANSAKSI TERBARU[/bold bright_cyan]"
+        )
+
+    elif pilihan == "Sortir transaksi terlama":
+
+        hasil = sorted(
+            transaksi,
+            key=lambda item: datetime.strptime(item["tanggal"], "%d-%m-%Y %H:%M")
+        )
+
+        tampilkan_data_transaksi(
+            hasil,
+            "[bold bright_cyan]TRANSAKSI - TRANSAKSI TERLAMA[/bold bright_cyan]"
+        )
+
+    pause()
+
+
+# =========================================================
 # FILTER TRANSAKSI
 # =========================================================
 
@@ -949,6 +1135,8 @@ def main():
                 "5",
                 "6",
                 "7",
+                "8",
+                "9",
                 "0"
             ],
             style=custom_style
@@ -984,6 +1172,14 @@ def main():
         elif pilihan == "7":
 
             export_excel_menu()
+
+        elif pilihan == "8":
+
+            hapus_transaksi()
+
+        elif pilihan == "9":
+
+            search_sort_transaksi()
 
         elif pilihan == "0":
 

@@ -1,6 +1,6 @@
 import requests
 
-TOKEN = "1YfTobfBVHjCmcQo1YMv"
+TOKEN = "vQa9Mav8Yi7gbHCvsoku"
 
 def kirim_whatsapp(
     nomor,
