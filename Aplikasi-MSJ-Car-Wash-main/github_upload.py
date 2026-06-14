@@ -10,7 +10,7 @@ import os
 # CONFIG
 # =========================================================
 
-GITHUB_TOKEN = "-"  # 
+GITHUB_TOKEN = "" # Ganti dengan token GitHub
 REPO_NAME = "barufaris782-droid/msj-carwash-storage"
 BRANCH = "main"
 
