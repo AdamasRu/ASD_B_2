@@ -10,11 +10,11 @@ import os
 # CONFIG
 # =========================================================
 
-GITHUB_TOKEN = "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"  # <-- GANTI DENGAN TOKEN BARU YANG PUNYA SCOPE REPO
-REPO_NAME = "barufaris782-droid/msj-carwash-storage"
-BRANCH = "main"
+GITHUB_TOKEN = "" # Ganti dengan token GitHub
+REPO_NAME = ""
+BRANCH = ""
 
-# =========================================================
+# ================================= ========================
 # UPLOAD PDF
 # =========================================================
 

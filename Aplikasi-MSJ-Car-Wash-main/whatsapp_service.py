@@ -1,6 +1,6 @@
 import requests
 
-TOKEN = "1YfTobfBVHjCmcQo1YMv"
+TOKEN = "" #Ganti dengan token Fonnte
 
 def kirim_whatsapp(
     nomor,
