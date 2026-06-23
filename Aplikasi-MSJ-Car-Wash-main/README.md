@@ -4,3 +4,5 @@ Repository proyek akhir Algoritma &amp; Struktur Data kelompok 2 untuk aplikasi 
 Isi Detail Personal acess token github, repo, dan branch, pada github_upload.py line 13-15
 
 Isi Token Fontte pada whatsapp_service.py line 3 untuk mengaktifkan fitur layanan invoice via WA
+
+Link Youtube : https://youtu.be/2pOt5g-0OSY
